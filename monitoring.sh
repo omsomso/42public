@@ -6,7 +6,7 @@
 #    By: kpawlows <kpawlows@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/01 00:23:37 by kpawlows          #+#    #+#              #
-#    Updated: 2022/12/01 14:29:02 by kpawlows         ###   ########.fr        #
+#    Updated: 2022/12/01 15:09:07 by kpawlows         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ physical_cpus=$(grep "physical id" /proc/cpuinfo | uniq | wc -l)
 virtual_cpus=$(grep "processor" /proc/cpuinfo | uniq | wc -l)
 
 ram_used_m=$(free -m | awk '/Mem/ {print $3}')
-ram_total_m=$(free -m | awk '/Mem/ {print $2"MB"}')
+ram_total_m=$(free -m | awk '/Mem/ {print $2}')
 ram_percent=$(echo $ram_used_m/$ram_total_m*100 | bc -l | rev | cut -c 20- | rev)
 
 disk_used=$(df -h --total / | awk '/total/ {print $3}')
@@ -47,7 +47,7 @@ echo "
 #Architecture: $architecture
 #CPU physical : $physical_cpus
 #vCPU : $virtual_cpus
-#Memory Usage : $ram_used_m/$ram_total_m ($ram_percent%)
+#Memory Usage : $ram_used_m/$ram_total'MB' ($ram_percent'%')
 #Disk Usage : $disk_used/$disk_total ($disk_percent)
 #CPU load : $cpu_load
 #Last boot : $last_boot
