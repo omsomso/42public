@@ -6,7 +6,7 @@
 #    By: kpawlows <kpawlows@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/01 00:23:37 by kpawlows          #+#    #+#              #
-#    Updated: 2022/12/01 15:09:07 by kpawlows         ###   ########.fr        #
+#    Updated: 2022/12/01 17:09:21 by kpawlows         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,13 +17,13 @@ architecture=$(uname -a)
 physical_cpus=$(grep "physical id" /proc/cpuinfo | uniq | wc -l)
 virtual_cpus=$(grep "processor" /proc/cpuinfo | uniq | wc -l)
 
-ram_used_m=$(free -m | awk '/Mem/ {print $3}')
-ram_total_m=$(free -m | awk '/Mem/ {print $2}')
-ram_percent=$(echo $ram_used_m/$ram_total_m*100 | bc -l | rev | cut -c 20- | rev)
+ram_used=$(free -m | awk '/Mem/ {print $3}')
+ram_total=$(free -m | awk '/Mem/ {print $2}')
+ram_percent=$(echo $ram_used/$ram_total*100 | bc -l | rev | cut -c 20- | rev)
 
-disk_used=$(df -h --total / | awk '/total/ {print $3}')
-disk_total=$(df -h --total / | awk '/total/ {print $2"b"}')
-disk_percent=$(df -h --total / | awk '/total/ {print $5}')
+disk_used=$(df -h --total | awk '/total/ {print $3}')
+disk_total=$(df -h --total | awk '/total/ {print $2"b"}')
+disk_percent=$(df -h --total | awk '/total/ {print $5}')
 
 cpu_load=$(top -bn1 | grep '^%Cpu' | cut -c 9- | xargs | awk '{printf("%.1f%%"), $1 + $3}')
 
@@ -40,14 +40,11 @@ mac=$(ip link show | awk '$1 == "link/ether" {print $2}')
 
 sudo=$(journalctl _COMM=sudo | grep COMMAND | wc -l)
 
-Mb_sign=$(echo "Mb")
-b_sign=$(echo "b")
-
 echo "
 #Architecture: $architecture
 #CPU physical : $physical_cpus
 #vCPU : $virtual_cpus
-#Memory Usage : $ram_used_m/$ram_total'MB' ($ram_percent'%')
+#Memory Usage : $ram_used/${ram_total}MB ($ram_percent'%')
 #Disk Usage : $disk_used/$disk_total ($disk_percent)
 #CPU load : $cpu_load
 #Last boot : $last_boot
